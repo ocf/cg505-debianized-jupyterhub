@@ -8,13 +8,9 @@ pull: clean
 	tar -xzf repo.tar.gz -C debianized-jupyterhub --strip-components 1
 
 .PHONY: package_%
-package_%: build_%
-	mkdir -p "dist_$*"
-	docker run -e "DECKSCHRUBBER_TAG=${DECKSCHRUBBER_TAG}" \
-		-e "DIST_TAG=$*" \
-		--user $(shell id -u ${USER}):$(shell id -g ${USER}) \
-		-v $(CURDIR)/dist_$*:/mnt:rw \
-		deckschrubber-build
+package_%: pull
+	(cd debianized-jupyterhub && ./build.sh debian:$*)
+	cp -r dist ../dist_$*
 
 .PHONY: clean
 clean:
