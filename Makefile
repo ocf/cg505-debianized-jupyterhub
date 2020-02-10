@@ -1,7 +1,8 @@
-DEBIANZED_JUPYTERHUB_TAG := v1.0.0-1
+DEBIANZED_JUPYTERHUB_TAG := c3a0e625c6393a1f85d221353c2cfcfc02a76912
 
 .PHONY: pull
-pull: clean
+pull:
+	rm -rf repo.tar.gz debianized-jupyterhub
 	mkdir -p debianized-jupyterhub
 	wget -O repo.tar.gz https://github.com/1and1/debianized-jupyterhub/archive/${DEBIANZED_JUPYTERHUB_TAG}.tar.gz
 	# Places the contents of the top-level extracted dir in the dir debianized-jupyterhub
@@ -10,7 +11,7 @@ pull: clean
 .PHONY: package_%
 package_%: pull
 	(cd debianized-jupyterhub && ./build.sh debian:$*)
-	cp -r dist ../dist_$*
+	cp -r debianized-jupyterhub/dist dist_$*
 
 .PHONY: clean
 clean:
