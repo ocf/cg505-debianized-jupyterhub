@@ -12,6 +12,7 @@ pull:
 package_%: pull
 	(cd debianized-jupyterhub && ./build.sh debian:$*)
 	cp -r debianized-jupyterhub/dist dist_$*
+	rm -f dist_$*/*dbgsym*
 
 .PHONY: clean
 clean:
