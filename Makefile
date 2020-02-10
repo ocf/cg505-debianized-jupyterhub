@@ -7,8 +7,13 @@ pull_%:
 	# Places the contents of the top-level extracted dir in the dir debianized-jupyterhub
 	tar -xzf repo-$*.tar.gz -C debianized-jupyterhub-$* --strip-components 1
 
+.PHONY: customize_%
+customize_%:
+	# Replace the default sudospawner dep with batchspawner.
+	sed -i "s/'sudospawner.*'/'batchspawner'/g" debianized-jupyterhub-$*/setup.py
+
 .PHONY: package_%
-package_%: pull_%
+package_%: pull_% customize_%
 	(cd debianized-jupyterhub-$* && ./build.sh debian:$*)
 	cp -r debianized-jupyterhub-$*/dist dist_$*
 
